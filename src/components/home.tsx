@@ -35,14 +35,23 @@ const Home = ({
   onAddToCart = () => {},
 }: HomeProps) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const { categories, loading: categoriesLoading } = useCategories();
   const { products, loading: productsLoading } =
-    useProducts(selectedCategoryId);
+    useProducts(selectedCategoryId, searchQuery);
 
   const handleCategorySelect = (subcategoryId: string) => {
     setSelectedCategoryId(subcategoryId);
     onCategorySelect(subcategoryId);
   };
+
+  const handleSearch = (Query: string) => {
+    setSearchQuery(Query);
+    onSearch(Query);
+  }
+
+  console.log("search query", searchQuery);
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -50,7 +59,7 @@ const Home = ({
         location={location}
         cartItemCount={cartItemCount}
         onLocationChange={onLocationChange}
-        onSearch={onSearch}
+        onSearch={handleSearch}
         onCartClick={onCartClick}
       />
       <DeliveryBanner

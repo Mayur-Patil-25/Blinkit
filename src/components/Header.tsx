@@ -32,6 +32,9 @@ const Header = ({
     "Houston, TX",
   ];
 
+  console.log(onSearch);
+  
+
   return (
     <header className="sticky top-0 z-50 w-full h-[72px] bg-white border-b shadow-sm">
       <div className="container mx-auto h-full px-4 flex items-center justify-between gap-4">

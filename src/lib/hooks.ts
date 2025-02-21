@@ -72,31 +72,35 @@ export function useCategories() {
   return { categories, loading };
 }
 
-export function useProducts(categoryId?: string, subcategoryId?: string) {
+export function useProducts(categoryId?: string,  search?:string) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       // Use mock data if no Supabase URL is provided
-      if (import.meta.env.VITE_SUPABASE_URL === undefined) {
-        setProducts(
-          mockProducts.filter(
-            (p) =>
-              (!categoryId || p.category_id === categoryId) &&
-              (!subcategoryId || p.subcategory_id === subcategoryId),
-          ),
-        );
-        setLoading(false);
-        return;
-      }
+      // if (import.meta.env.VITE_SUPABASE_URL === undefined) {
+      //   setProducts(
+      //     mockProducts.filter(
+      //       (p) =>
+      //         (!categoryId || p.category_id === categoryId) &&
+      //         (!subcategoryId || p.subcategory_id === subcategoryId),
+      //     ),
+      //   );
+      //   setLoading(false);
+      //   return;
+      // }
       let query = supabase.from("products").select("*");
 
+      // if (categoryId) {
+      //   query = query.eq("category_id", categoryId);
+      // }
       if (categoryId) {
-        query = query.eq("category_id", categoryId);
+        query = query.eq("subcategory_id", categoryId);
       }
-      if (subcategoryId) {
-        query = query.eq("subcategory_id", subcategoryId);
+
+      if (search) {
+        query = query.ilike("name", `%${search}%`);
       }
 
       const { data, error } = await query;
@@ -105,6 +109,9 @@ export function useProducts(categoryId?: string, subcategoryId?: string) {
         console.error("Error fetching products:", error);
         return;
       }
+
+      console.log("Search", search);
+      
 
       setProducts(data);
       setLoading(false);
@@ -124,7 +131,7 @@ export function useProducts(categoryId?: string, subcategoryId?: string) {
     return () => {
       productsSubscription.unsubscribe();
     };
-  }, [categoryId, subcategoryId]);
+  }, [categoryId,  search]);
 
   return { products, loading };
 }
