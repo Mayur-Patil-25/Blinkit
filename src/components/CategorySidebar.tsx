@@ -9,6 +9,7 @@ import {
 import { Button } from "./ui/button";
 
 import { Database } from "@/types/schema";
+import { on } from "events";
 
 type Category = Database["public"]["Tables"]["categories"]["Row"] & {
   subcategories: Database["public"]["Tables"]["subcategories"]["Row"][];
@@ -25,6 +26,8 @@ const CategorySidebar = ({
   selectedCategory = "",
   onCategorySelect = () => {},
 }: CategorySidebarProps) => {
+  console.log("on category select",onCategorySelect);
+  
   return (
     <div className="w-[280px] h-full bg-white border-r border-gray-200 p-4">
       <h2 className="text-xl font-semibold mb-4">Categories</h2>
